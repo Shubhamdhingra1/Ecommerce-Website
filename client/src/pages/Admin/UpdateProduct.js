@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "./../../components/Layout/Layout";
 import AdminMenu from "./../../components/Layout/AdminMenu";
 import toast from "react-hot-toast";
-import axios from "axios";
+import api from "../../config/axios";
 import { Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 const { Option } = Select;
@@ -23,9 +23,7 @@ const UpdateProduct = () => {
   //get single product
   const getSingleProduct = async () => {
     try {
-      const { data } = await axios.get(
-        `/api/v1/product/get-product/${params.slug}`
-      );
+      const { data } = await api.get(`/api/v1/product/get-product/${params.slug}`);
       setName(data.product.name);
       setId(data.product._id);
       setDescription(data.product.description);
@@ -45,7 +43,7 @@ const UpdateProduct = () => {
   //get all category
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get("/api/v1/category/get-category");
+      const { data } = await api.get("/api/v1/category/get-category");
       if (data?.success) {
         setCategories(data?.category);
       }
@@ -70,10 +68,7 @@ const UpdateProduct = () => {
       productData.append("quantity", quantity);
       photo && productData.append("photo", photo);
       productData.append("category", category);
-      const { data } = axios.put(
-        `/api/v1/product/update-product/${id}`,
-        productData
-      );
+      const { data } = await api.put(`/api/v1/product/update-product/${id}`, productData);
       if (data?.success) {
         toast.error(data?.message);
       } else {
@@ -91,9 +86,7 @@ const UpdateProduct = () => {
     try {
       let answer = window.prompt("Are You Sure want to delete this product ? ");
       if (!answer) return;
-      const { data } = await axios.delete(
-        `/api/v1/product/delete-product/${id}`
-      );
+      const { data } = await api.delete(`/api/v1/product/delete-product/${id}`);
       toast.success("Product DEleted Succfully");
       navigate("/dashboard/admin/products");
     } catch (error) {
@@ -153,7 +146,7 @@ const UpdateProduct = () => {
                 ) : (
                   <div className="text-center">
                     <img
-                      src={`/api/v1/product/product-photo/${id}`}
+                      src={`${process.env.REACT_APP_API_URL || ""}/api/v1/product/product-photo/${id}`}
                       alt="product_photo"
                       height={"200px"}
                       className="img img-responsive"

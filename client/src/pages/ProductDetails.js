@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./../components/Layout/Layout";
-import axios from "axios";
+import api from "../config/axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/ProductDetailsStyles.css";
 
@@ -17,9 +17,7 @@ const ProductDetails = () => {
   //getProduct
   const getProduct = async () => {
     try {
-      const { data } = await axios.get(
-        `/api/v1/product/get-product/${params.slug}`
-      );
+      const { data } = await api.get(`/api/v1/product/get-product/${params.slug}`);
       setProduct(data?.product);
       getSimilarProduct(data?.product._id, data?.product.category._id);
     } catch (error) {
@@ -29,9 +27,7 @@ const ProductDetails = () => {
   //get similar product
   const getSimilarProduct = async (pid, cid) => {
     try {
-      const { data } = await axios.get(
-        `/api/v1/product/related-product/${pid}/${cid}`
-      );
+      const { data } = await api.get(`/api/v1/product/related-product/${pid}/${cid}`);
       setRelatedProducts(data?.products);
     } catch (error) {
       console.log(error);
@@ -42,7 +38,7 @@ const ProductDetails = () => {
       <div className="row container product-details">
         <div className="col-md-6">
           <img
-            src={`/api/v1/product/product-photo/${product._id}`}
+            src={`${process.env.REACT_APP_API_URL || ""}/api/v1/product/product-photo/${product._id}`}
             className="card-img-top"
             alt={product.name}
             height="300"
@@ -75,7 +71,7 @@ const ProductDetails = () => {
           {relatedProducts?.map((p) => (
             <div className="card m-2" key={p._id}>
               <img
-                src={`/api/v1/product/product-photo/${p._id}`}
+                src={`${process.env.BACKEND_URL}/api/v1/product/product-photo/${p._id}`}
                 className="card-img-top"
                 alt={p.name}
               />

@@ -3,7 +3,7 @@ import UserMenu from "../../components/Layout/UserMenu";
 import Layout from "./../../components/Layout/Layout";
 import { useAuth } from "../../context/auth";
 import toast from "react-hot-toast";
-import axios from "axios";
+import api from "../../config/axios";
 const Profile = () => {
   //context
   const [auth, setAuth] = useAuth();
@@ -27,7 +27,7 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put("/api/v1/auth/profile", {
+      const { data } = await api.put("/api/v1/auth/profile", {
         name,
         email,
         password,
