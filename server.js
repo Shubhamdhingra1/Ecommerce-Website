@@ -16,9 +16,12 @@ connectDB();
 
 //rest object
 const app = express();
-
+const corsOptions = {
+  origin: "https://ecommerce-website-yssw.vercel.app", // frontend URL
+  optionsSuccessStatus: 200,
+};
 //middelwares
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("dev"));
 
